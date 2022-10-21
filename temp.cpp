@@ -28,6 +28,52 @@ node* find(int k){
         return XFast[W][k];
     return nullptr;
 }
+node* succesor(int k){
+    int l{}, h=W+1, mid{}, prefix{};
+    node* temp{};
+    while(h-1>l){
+        mid=(l+h)/2;
+        prefix=k>>(W-mid);
+        if(XFast[mid].find(prefix)!=XFast[mid].end()){
+            l=mid;
+            temp=XFast[mid][prefix];
+        }
+        else{
+            h=mid;
+        }
+    }
+    if(temp==nullptr || temp->level==0) return nullptr;
+    if(temp->level==W) return temp;
+    int shift=W-temp->level-1;
+    int bigPrefix=k>>shift;
+    if(bigPrefix%2) temp=temp->right;
+    else temp=temp->left;
+    if(temp->key<k) return temp->right;
+    return temp;
+}
+node* predecessor(int k){
+    int l{}, h=W+1, mid{}, prefix{};
+    node* temp{};
+    while(h-1>l){
+        mid=(l+h)/2;
+        prefix=k>>(W-mid);
+        if(XFast[mid].find(prefix)!=XFast[mid].end()){
+            l=mid;
+            temp=XFast[mid][prefix];
+        }
+        else{
+            h=mid;
+        }
+    }
+    if(temp==nullptr || temp->level==0) return nullptr;
+    if(temp->level==W) return temp;
+    int shift=W-temp->level-1;
+    int bigPrefix=k>>shift;
+    if(bigPrefix%2) temp=temp->right;
+    else temp=temp->left;
+    if(temp->key>k) return temp->left;
+    return temp;
+}
 int main(){
     cin>>U;
     W=bitsCounter(U);
