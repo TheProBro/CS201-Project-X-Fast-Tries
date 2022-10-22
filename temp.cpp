@@ -83,7 +83,6 @@ node *getLeftmostLeaf(node *parent){
     }
     return parent;
 }
-
 node * getRightmostLeaf(node *parent){
     while(parent->level != W){
         if(parent->right != nullptr)
