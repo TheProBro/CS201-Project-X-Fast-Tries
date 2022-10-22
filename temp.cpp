@@ -74,6 +74,88 @@ node* predecessor(int k){
     if(temp->key>k) return temp->left;
     return temp;
 }
+node *getLeftmostLeaf(node *parent){
+    while(parent->level != W){
+        if(parent->left != nullptr)
+            parent = parent->left;
+        else
+            parent = parent->right;
+    }
+    return parent;
+}
+
+node * getRightmostLeaf(node *parent){
+    while(parent->level != W){
+        if(parent->right != nullptr)
+            parent = parent->right;
+        else
+            parent = parent->left;
+    }
+    return parent;
+}
+void insert(int value){
+    node *temp=new node();
+    temp->key=value;
+    temp->level=W;
+
+    node *pre=predecessor(value);
+    node *suc=succesor(value);
+    if(pre!=nullptr){
+        if(pre->level!=W){
+            cout<<"Wierd level"<<pre->level<<endl;
+        }
+        temp->right=pre->right;
+        pre->right=temp;
+        temp->left=pre;
+    }
+    if(suc!=nullptr){
+        if(suc->level!=W){
+            cout<<"Wierd level"<<suc->level<<endl;
+        }
+        temp->left=suc->left;
+        suc->left=temp;
+        temp->right=suc;
+    }
+    int tier=1,prefix{};
+    while(tier!=W){
+        prefix=value>>(W-tier);
+        if(XFast[tier].find(prefix)==XFast[tier].end()){
+            node *inter=new node();
+            inter->level=tier;
+            XFast[tier][prefix]=inter;
+            if(prefix & 1){
+                XFast[tier-1][prefix>>1]->right=inter;
+            }
+            else
+                XFast[tier-1][prefix>>1]->left=inter;    
+            }
+            ++tier;
+        }
+    XFast[W][value]=temp;
+    if(value & 1){
+        XFast[W-1][value>>1]->right=temp;
+    }
+    else{
+        XFast[W-1][value>>1]->left=temp;
+    }
+    prefix=value;
+    tier=W-1;
+    while(tier!=0){
+        prefix=prefix>>1;
+        if(XFast[tier][prefix]->left==nullptr){
+            XFast[tier][prefix]->left==getLeftmostLeaf(XFast[0][0]->right);
+        }
+        else if(XFast[tier][prefix]->right == nullptr)
+            XFast[tier][prefix]->right = getRightmostLeaf(XFast[tier][prefix]->left);
+        --tier;
+    }
+    if(XFast[0][0]->left == nullptr){
+        XFast[0][0]->left = getLeftmostLeaf(XFast[0][0]->right);
+    }
+    if(XFast[0][0]->right == nullptr){
+        XFast[0][0]->right = getRightmostLeaf(XFast[0][0]->left);
+    }
+}
 int main(){
     cin>>U;
     W=bitsCounter(U);
