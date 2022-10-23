@@ -215,7 +215,7 @@ int main(){
     // cout<<XFast[1][0]->right->key<<'\n';
     while(1){
         char c;cout<<"Enter I to insert"<<"\n"<<"Enter P to get predecessor"<<"\n"<<"Enter S to get successor"<<"\n";
-        cout<<"Enter your coice:"cin>>c;
+        cout<<"Enter your coice:";cin>>c;
         switch(c){
             case 'I':{
                 int n;cout<<"Enter number to be inserted:";
