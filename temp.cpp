@@ -198,17 +198,47 @@ void insert(int value){
 //     }
 // }
 int main(){
-    U=15;
+    U=31;
+    cout<<"Enter max number of bits:";
+    int n;cin>>n;
+    U=pow(2,n);
     W=bitsCounter(U);
     // cout<<W<<'\n';
     XFast=vector<unordered_map<int, node*>>(W+1);
     XFast[0][0]=new node();
     XFast[0][0]->level=0;
     insert(2);
-    cout<<XFast[0][0]->right->key<<'\n';
-    insert(3);
-    cout<<XFast[0][0]->right->key<<'\n';
-    insert(12);
-    cout<<XFast[1][0]->right->key<<'\n';
+    //cout<<XFast[0][0]->right->key<<'\n';
+    // insert(3);
+    // cout<<XFast[0][0]->right->key<<'\n';
+    // insert(12);
+    // cout<<XFast[1][0]->right->key<<'\n';
+    while(1){
+        char c;cout<<"Enter I to insert"<<"\n"<<"Enter P to get predecessor"<<"\n"<<"Enter S to get successor"<<"\n";
+        cout<<"Enter your coice:"<<cin>>c;
+        switch(c){
+            case 'I':{
+                int n;cout<<"Enter number to be inserted:";
+                cin>>n;
+                insert(n);
+                break;
+            }
+            case 'P':{
+                int k;cout<<"Enter key whose predecessor you want:";cin>>k;
+                cout<<"Predecessor of"<<k<<"is"<<predecessor(k)->key<<"\n";
+                break;
+            }
+            case 'S':{
+                int k;cout<<"Enter key whose succcessor you want:";cin>>k;
+                cout<<"Successor of"<<k<<"is"<<succesor(k)->key<<"\n";
+                break;
+            }
+            case 'Q':{
+                return 0;
+            }
+            default:
+               cout<<"Enter valid character"<<"\n";
+        }
+    }
     return 0;
 }
