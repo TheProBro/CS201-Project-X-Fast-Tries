@@ -171,7 +171,7 @@ void del(int key){
             pre->right=suc;
             suc->left=pre;
         }
-        else pre->right=nullptr;
+        else suc->left=nullptr;
     }
     else{
         if(pre!=nullptr) pre->right=nullptr;
@@ -194,7 +194,7 @@ void del(int key){
     k>>=1;
     while(tier>=0){
         if(k&1){
-            if(XFast[tier][k>>1]->left->key==k){
+            if(XFast[tier][k>>1]->left->key==key){
                 if(deletions.back()==tier+1)
                     deletions.push_back(tier);
                 else XFast[tier][k>>1]->left=suc;
@@ -203,13 +203,13 @@ void del(int key){
                 XFast[tier][k>>1]->right=pre;
         }
         else{
-            if(XFast[tier][k>>1]->right->key==k){
+            if(XFast[tier][k>>1]->right->key==key){
                 if(deletions.back()==tier+1)
                     deletions.push_back(tier);
                 else XFast[tier][k>>1]->right=pre;
             }
             else if(tier+1==deletions.back())
-                XFast[tier][k>>1]->left=pre;
+                XFast[tier][k>>1]->left=suc;
         }
         tier--;
         k>>=1;
@@ -237,5 +237,8 @@ int main(){
     cout<<predecessor(14)->key<<'\n';
     del(13);
     cout<<succesor(13)->key<<'\n';
+    del(12);
+    insert(13);
+    cout<<succesor(10)->key<<'\n';
     return 0;
 }
