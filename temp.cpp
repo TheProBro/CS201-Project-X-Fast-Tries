@@ -157,46 +157,68 @@ void insert(int value){
         XFast[0][0]->right = getRightmostLeaf(XFast[0][0]->left);
     }
 }
-// void del(int k){
-//     if(XFast[W].find(k)==XFast[W].end()){
-//         cout<<"Element to be deleted is not present\n";
-//         return;   
-//     }
-//     node* temp=XFast[W][k];
-//     node *pre=temp->left;
-//     node *suc=temp->right;
-//     if(suc!=nullptr){
-//         if(pre!=nullptr){
-//             pre->right=suc;
-//             suc->left=pre;
-//         }
-//         else pre->right=nullptr;
-//     }
-//     else{
-//         if(pre!=nullptr) pre->right=nullptr;
-//     }
-//     int tier{W-1}, prefix{};
-//     bool DeleteNext=0, DeleteNow=1;
-//     while(tier>=0){
-//         if(DeleteNext){
-//             DeleteNow=1;
-//             DeleteNext=0;
-//         }
-//         node* t=XFast[tier][k>>1];
-//         if(k & 1){
-//             if(t->left->key==k)
-//                 DeleteNext=1;
-//         }
-//         else{
-//             if(t->right->key==k)
-//         }
-//         if(DeleteNow){
-//             free(XFast[tier+1][k]);
-//         }
-//         tier--;
-//         k>>=1;
-//     }
-// }
+void del(int key){
+    int k=key;
+    if(XFast[W].find(k)==XFast[W].end()){
+        cout<<"Element to be deleted is not present\n";
+        return;   
+    }
+    node* temp=XFast[W][k];
+    node *pre=temp->left;
+    node *suc=temp->right;
+    if(suc!=nullptr){
+        if(pre!=nullptr){
+            pre->right=suc;
+            suc->left=pre;
+        }
+        else pre->right=nullptr;
+    }
+    else{
+        if(pre!=nullptr) pre->right=nullptr;
+    }
+    vector<int> deletions;
+    deletions.push_back(W);
+    if(k&1){
+        if(XFast[W-1][k>>1]->left->key==k)
+            deletions.push_back(W-1);
+        else 
+        XFast[W-1][k>>1]->right=pre;
+    }
+
+    else{
+        if(XFast[W-1][k>>1]->right->key==k)
+            deletions.push_back(W-1);
+        else XFast[W-1][k>>1]->left=suc;
+    }
+    int tier{W-2};
+    k>>=1;
+    while(tier>=0){
+        if(k&1){
+            if(XFast[tier][k>>1]->left->key==k){
+                if(deletions.back()==tier+1)
+                    deletions.push_back(tier);
+                else XFast[tier][k>>1]->left=suc;
+            }
+            else if(tier+1==deletions.back())
+                XFast[tier][k>>1]->right=pre;
+        }
+        else{
+            if(XFast[tier][k>>1]->right->key==k){
+                if(deletions.back()==tier+1)
+                    deletions.push_back(tier);
+                else XFast[tier][k>>1]->right=pre;
+            }
+            else if(tier+1==deletions.back())
+                XFast[tier][k>>1]->left=pre;
+        }
+        tier--;
+        k>>=1;
+    }
+    for(int lvl: deletions){
+        XFast[lvl].erase(key>>(W-lvl));
+    }
+    cout<<"Deleted Successfully!\n";
+}
 int main(){
     U=15;
     W=bitsCounter(U);
@@ -204,11 +226,16 @@ int main(){
     XFast=vector<unordered_map<int, node*>>(W+1);
     XFast[0][0]=new node();
     XFast[0][0]->level=0;
-    insert(2);
-    cout<<XFast[0][0]->right->key<<'\n';
-    insert(3);
-    cout<<XFast[0][0]->right->key<<'\n';
+    insert(14);
+    // cout<<XFast[0][0]->right->key<<'\n';
+    insert(13);
+    // cout<<XFast[0][0]->right->key<<'\n';
     insert(12);
-    cout<<XFast[1][0]->right->key<<'\n';
+    // cout<<succesor(15)->key<<'\n';
+    cout<<succesor(13)->key<<'\n';
+    cout<<succesor(10)->key<<'\n';
+    cout<<predecessor(14)->key<<'\n';
+    del(13);
+    cout<<succesor(13)->key<<'\n';
     return 0;
 }
