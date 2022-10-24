@@ -31,6 +31,7 @@ node* find(int k){
 node* succesor(int k){
     int l{}, h=W+1, mid{}, prefix{};
     node* temp{};
+    bool nonempty=0;
     while(h-1>l){
         mid=(l+h)/2;
         prefix=k>>(W-mid);
@@ -39,10 +40,18 @@ node* succesor(int k){
             temp=XFast[mid][prefix];
         }
         else{
+            if(!XFast[mid].empty()) nonempty=1;
             h=mid;
         }
     }
-    if(temp==nullptr || temp->level==0) return nullptr;
+    if(temp==nullptr) {
+        if(nonempty){
+            temp=XFast[0][0]->left->level==W?XFast[0][0]->left:XFast[0][0]->right;
+            if(temp->key>k) return temp;
+            else return nullptr;
+        }
+        else return nullptr;
+    }
     if(temp->level==W) return temp;
     int shift=W-temp->level-1;
     int bigPrefix=k>>shift;
@@ -54,6 +63,7 @@ node* succesor(int k){
 node* predecessor(int k){
     int l{}, h=W+1, mid{}, prefix{};
     node* temp{};
+    bool nonempty=0;
     while(h-1>l){
         mid=(l+h)/2;
         prefix=k>>(W-mid);
@@ -62,10 +72,18 @@ node* predecessor(int k){
             temp=XFast[mid][prefix];
         }
         else{
+            if(!XFast[mid].empty()) nonempty=1;
             h=mid;
         }
     }
-    if(temp==nullptr || temp->level==0) return nullptr;
+    if(temp==nullptr) {
+        if(nonempty){
+            temp=XFast[0][0]->left->level==W?XFast[0][0]->left:XFast[0][0]->right;
+            if(temp->key<k) return temp;
+            else return nullptr;
+        }
+        else return nullptr;
+    }
     if(temp->level==W) return temp;
     int shift=W-temp->level-1;
     int bigPrefix=k>>shift;
@@ -226,19 +244,33 @@ int main(){
     XFast=vector<unordered_map<int, node*>>(W+1);
     XFast[0][0]=new node();
     XFast[0][0]->level=0;
-    insert(14);
-    // cout<<XFast[0][0]->right->key<<'\n';
-    insert(13);
-    // cout<<XFast[0][0]->right->key<<'\n';
+    // insert(14);
+    // // cout<<XFast[0][0]->right->key<<'\n';
+    // insert(13);
+    // // cout<<XFast[0][0]->right->key<<'\n';
+    // insert(12);
+    // // cout<<succesor(15)->key<<'\n';
+    // cout<<succesor(13)->key<<'\n';
+    // cout<<succesor(10)->key<<'\n';
+    // cout<<predecessor(14)->key<<'\n';
+    // del(13);
+    // cout<<succesor(13)->key<<'\n';
+    // del(12);
+    // insert(1);
+    // insert(10);
+    // insert(12);
+    // cout<<succesor(9)->key<<'\n';
+    // cout<<predecessor(9)->key<<'\n';
+    // del(14);
+    // cout<<succesor(11)->key<<'\n';
+    insert(1);
+    insert(10);
     insert(12);
-    // cout<<succesor(15)->key<<'\n';
-    cout<<succesor(13)->key<<'\n';
-    cout<<succesor(10)->key<<'\n';
-    cout<<predecessor(14)->key<<'\n';
-    del(13);
-    cout<<succesor(13)->key<<'\n';
+    insert(14);
+    cout<<predecessor(9)->key<<'\n';
     del(12);
-    insert(13);
-    cout<<succesor(10)->key<<'\n';
+    cout<<succesor(11)->key<<'\n';
+    del(14);
+    cout<<succesor(11)->key<<'\n';
     return 0;
 }
