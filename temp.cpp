@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct node
-{
+struct node {
     int key;
     int level;
     node* left, *right;
