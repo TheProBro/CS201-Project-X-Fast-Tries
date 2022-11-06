@@ -11,7 +11,7 @@ struct node {
         left=right=nullptr;
     }
 };
-int U, W, choice;
+int U, W;
 vector<unordered_map<int, node*>> XFast;
 
 int bitsCounter(int a) {
@@ -230,7 +230,8 @@ void del(int key) {
     cout<<"Deleted Successfully!\n";
 }
 
-void menu() {
+int menu() {
+    int choice;
     cout << "1. Insertion" <<\n;
     cout << "2. Deletion" <<\n;
     cout << "3. Successor" <<\n;
@@ -238,13 +239,14 @@ void menu() {
     cout << "5. Search" <<\n;
     cout << "Enter your Choice: " <<\n;
     cin >> choice;
+    return choice;
 }
 
 int main() {
     
     while(1) (
-        
-        menu();
+        int choice;
+        choice = menu();
         switch(choice) {
 
             case 1: {   
