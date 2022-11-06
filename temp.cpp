@@ -232,62 +232,74 @@ void del(int key) {
 
 int menu() {
     int choice;
-    cout << "1. Insertion" <<\n;
-    cout << "2. Deletion" <<\n;
-    cout << "3. Successor" <<\n;
-    cout << "4. Predecessor" <<\n;
-    cout << "5. Search" <<\n;
-    cout << "Enter your Choice: " <<\n;
+    cout << "1. Insertion" <<'\n';
+    cout << "2. Deletion" <<'\n';
+    cout << "3. Successor" <<'\n';
+    cout << "4. Predecessor" <<'\n';
+    cout << "5. Search" <<'\n';
+    cout << "Enter your Choice: ";
     cin >> choice;
     return choice;
 }
 
 int main() {
-    
-    while(1) (
+    cout<<"Enter size of universe: ";
+    cin>>U;
+    W=bitsCounter(U);
+    XFast=vector<unordered_map<int, node*>>(W+1);
+    XFast[0][0]=new node();
+    XFast[0][0]->level=0;
+    while(true) {
         int choice;
         choice = menu();
         switch(choice) {
 
             case 1: {   
-                //insertion
+                cout<<"Enter element to insert: ";
+                int n; cin>>n;
+                insert(n);
+                break;
             }
             case 2: {  
-                //deletion
+                cout<<"Enter element to delete: ";
+                int n; cin>>n;
+                del(n);
+                break;
             }
             case 3: {
                 // Successor
+                cout<<"Enter element: ";
+                int n; cin>>n;
+                node* x=succesor(n);
+                if(x!=nullptr)
+                    cout<<"Succesor of "<<n<<" is: "<<x->key<<'\n';
+                else cout<<n<<" does not have a succesor!\n";
+                break;
             }
             case 4: {
                 // Predecessor
+                cout<<"Enter element: ";
+                int n; cin>>n;
+                node* x=predecessor(n);
+                if(x!=nullptr)
+                    cout<<"Predecessor of "<<n<<" is: "<<x->key<<'\n';
+                else cout<<n<<" does not have a predecessor!\n";
+                break;
             }
             case 5: {
                 // Search
+                cout<<"Enter element: ";
+                int n; cin>>n;
+                node* x=find(n);
+                if(x!=nullptr)
+                    cout<<"Found with key as: "<<x->key<<'\n';
+                else cout<<n<<" not found\n";
+                break;
             }
             default: {
-                cout << "Invalid Choice!" <<\n;        
-
+                cout << "Invalid Choice!\n";        
+            }
         }
     }
-        
-    U=15;
-    W=bitsCounter(U);
-    // cout<<W<<'\n';
-    XFast=vector<unordered_map<int, node*>>(W+1);
-    XFast[0][0]=new node();
-    XFast[0][0]->level=0;
-    insert(1);
-    insert(8);
-    insert(9);
-    insert(10);
-    insert(12);
-    insert(14);
-    cout<<predecessor(7)->key<<'\n';
-    del(12);
-    cout<<succesor(11)->key<<'\n';
-    cout<<predecessor(10)->key<<'\n';
-    del(10);
-    cout<<predecessor(10)->key<<'\n';
-    cout<<succesor(2)->key<<'\n';
     return 0;
 }
