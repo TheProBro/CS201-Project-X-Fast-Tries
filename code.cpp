@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// node of the trie
 struct node {
     int key;
     int level;
@@ -11,9 +12,12 @@ struct node {
         left=right=nullptr;
     }
 };
+// Size of universe
 int U, W;
+// Xfast-Trie
 vector<unordered_map<int, node*>> XFast;
 
+// Counts number of bits in a number
 int bitsCounter(int a) {
     int count{};
     while(a!=0){
@@ -22,12 +26,17 @@ int bitsCounter(int a) {
     }
     return count;
 }
+
+// search function
 node* find(int k) {
     if(XFast[W].find(k)!=XFast[W].end()) 
         return XFast[W][k];
     return nullptr;
 }
+
+// finds an element >= the entered element
 node* succesor(int k) {
+    // binary search to find highest matching prefix
     int l{}, h=W+1, mid{}, prefix{};
     node* temp{};
     bool nonempty=0;
@@ -50,6 +59,7 @@ node* succesor(int k) {
         }
         else return nullptr;
     }
+    // check if the value is larger or smaller, traverse linked list accordingly by one step
     if(temp->level==W) return temp;
     int shift=W-temp->level-1;
     int bigPrefix=k>>shift;
@@ -58,7 +68,10 @@ node* succesor(int k) {
     if(temp->key<k) return temp->right;
     return temp;
 }
+
+// finds an element <= the entered element
 node* predecessor(int k) {
+    // binary search to find highest matching prefix
     int l{}, h=W+1, mid{}, prefix{};
     node* temp{};
     bool nonempty=0;
@@ -81,6 +94,7 @@ node* predecessor(int k) {
         }
         else return nullptr;
     }
+    // check if the value is larger or smaller, traverse linked list accordingly by one step
     if(temp->level==W) return temp;
     int shift=W-temp->level-1;
     int bigPrefix=k>>shift;
@@ -89,6 +103,8 @@ node* predecessor(int k) {
     if(temp->key>k) return temp->left;
     return temp;
 }
+
+// returns the smallest element in a sub-trie
 node *getLeftmostLeaf(node *p) {
     node* parent=p;
     while(parent->level != W){
@@ -99,6 +115,7 @@ node *getLeftmostLeaf(node *p) {
     }
     return parent;
 }
+// returns the largest element in a sub-trie
 node *getRightmostLeaf(node *p) {
     node *parent=p;
     while(parent->level != W){
@@ -109,11 +126,13 @@ node *getRightmostLeaf(node *p) {
     }
     return parent;
 }
+
+// inserts an element in the XFast-Trie
 void insert(int value) {
     node *temp=new node();
     temp->key=value;
     temp->level=W;
-
+    // find successor predecessor of the value, add element in between them in linked list in final level
     node *pre=predecessor(value);
     node *suc=succesor(value);
     if(pre!=nullptr) {
@@ -132,6 +151,7 @@ void insert(int value) {
         suc->left=temp;
         temp->right=suc;
     }
+    // traverse through all levels and add branches 
     int tier=1,prefix{};
     while(tier!=W) {
         prefix=value>>(W-tier);
@@ -154,6 +174,7 @@ void insert(int value) {
     } else {
         XFast[W-1][value>>1]->left=temp;
     }
+    // connect and update the descendant pointers
     prefix=value;
     tier=W-1;
     while(tier!=0){
@@ -171,6 +192,8 @@ void insert(int value) {
         XFast[0][0]->right = getRightmostLeaf(XFast[0][0]->left);
     }
 }
+
+// deletes an element from the XFast-Trie
 void del(int key) {
     int k=key;
     if(XFast[W].find(k)==XFast[W].end()) {
@@ -180,6 +203,7 @@ void del(int key) {
     node* temp=XFast[W][k];
     node *pre=temp->left;
     node *suc=temp->right;
+    // remove the element out of the linked list in the last level
     if(suc!=nullptr) {
         if(pre!=nullptr) {
             pre->right=suc;
@@ -189,6 +213,7 @@ void del(int key) {
     } else {
         if(pre!=nullptr) pre->right=nullptr;
     }
+    // delete all the threads that are associated with only the element being deleted
     vector<int> deletions;
     deletions.push_back(W);
     if(k&1) {
@@ -201,6 +226,7 @@ void del(int key) {
             deletions.push_back(W-1);
         else XFast[W-1][k>>1]->left=suc;
     }
+    // update descendant pointers at all levels
     int tier{W-2};
     k>>=1;
     while(tier>=0) {
@@ -230,6 +256,7 @@ void del(int key) {
     cout<<"Deleted Successfully!\n";
 }
 
+// prints the menu options
 int menu() {
     int choice;
     cout << "1. Insertion" <<'\n';
@@ -243,6 +270,7 @@ int menu() {
     return choice;
 }
 
+// main function
 int main() {
     cout<<"Enter size of universe: ";
     cin>>U;
