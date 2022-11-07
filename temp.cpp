@@ -237,6 +237,7 @@ int menu() {
     cout << "3. Successor" <<'\n';
     cout << "4. Predecessor" <<'\n';
     cout << "5. Search" <<'\n';
+    cout << "0. Exit" <<'\n';
     cout << "Enter your Choice: ";
     cin >> choice;
     return choice;
@@ -249,11 +250,11 @@ int main() {
     XFast=vector<unordered_map<int, node*>>(W+1);
     XFast[0][0]=new node();
     XFast[0][0]->level=0;
-    while(true) {
-        int choice;
+    int choice{1};
+    while(choice) {
         choice = menu();
         switch(choice) {
-
+            case 0: break;
             case 1: {   
                 cout<<"Enter element to insert: ";
                 int n; cin>>n;
