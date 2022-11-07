@@ -3,7 +3,11 @@ CS201 Project on Data Structures
 
 To run the code:
 	
-	Open terminal. Then, write g++ code.cpp. The code will compile. Then, run the code using ./a.out command. 
+	Open terminal. Then, write g++ code.cpp
+	
+	The code will compile. 
+	
+	Then, run the code using ./a.out command. 
 
 	Then, input the size of universe.
 	
